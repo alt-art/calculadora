@@ -1,0 +1,14 @@
+[package]
+name = "calculadora"
+version = "0.1.0"
+authors = ["alt-art <pedromendescraft@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+glib = "0.10.0"
+gtk = "0.9.0"
+gio = "0.9.0"
+
+[[bin]]
+name = "calculadora"
+path = "main.rs"
