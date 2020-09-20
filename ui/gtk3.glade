@@ -263,8 +263,8 @@ Para mais detalhes, visite &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="x">
-                        <property name="label" translatable="yes">x</property>
+                      <object class="GtkButton" id="*">
+                        <property name="label" translatable="yes">*</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="focus_on_click">False</property>
@@ -289,8 +289,8 @@ Para mais detalhes, visite &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id=",">
-                        <property name="label" translatable="yes">,</property>
+                      <object class="GtkButton" id=".">
+                        <property name="label" translatable="yes">.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="focus_on_click">False</property>

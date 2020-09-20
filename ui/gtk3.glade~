@@ -306,6 +306,7 @@ Para mais detalhes, visite &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html
                         <property name="label" translatable="yes">%</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                       </object>
                       <packing>
@@ -346,7 +347,7 @@ Para mais detalhes, visite &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html
                         <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                         <child>
-                          <object class="GtkImage" id="undo_icon">
+                          <object class="GtkImage">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="stock">gtk-clear</property>
@@ -359,10 +360,11 @@ Para mais detalhes, visite &lt;a href="https://www.gnu.org/licenses/gpl-3.0.html
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton">
+                      <object class="GtkButton" id="clear">
                         <property name="label" translatable="yes">c</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
                       </object>
                       <packing>
