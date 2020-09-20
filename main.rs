@@ -1,6 +1,7 @@
 extern crate gio;
 extern crate gtk;
 extern crate glib;
+extern crate meval; 
 
 use gtk::prelude::*;
 use gio::prelude::*;
@@ -23,10 +24,11 @@ fn build_ui(application: &gtk::Application) {
     let text_buffer = text.get_buffer().expect("Can't ct");
 
     let button_equal: Button = builder.get_object("=").expect("Coun't get Button");
+    let calc_clone = calc.borrow_mut().clone();
     button_equal.connect_clicked(clone!(@weak text_buffer => move |_| {
         text_buffer.set_text("=");
     }));
-
+    
     let button_undo: Button = builder.get_object("undo").expect("Coun't get Button");
     let calc_clone = calc.clone();
     button_undo.connect_clicked(clone!(@weak text_buffer => move |_| {
@@ -46,17 +48,25 @@ fn build_ui(application: &gtk::Application) {
     for digit in digits.iter() {
         let button:Button = builder.get_object(&digit.to_string()).expect("Cout't get Button");
         let calc_clone = calc.clone();
-        button.connect_clicked(clone!(@weak text => move |_| {
+        button.connect_clicked(clone!(@weak text_buffer => move |_| {
+            let last_char = calc_clone.borrow_mut().chars().last().unwrap_or_default();
+            let is_number = last_char.to_string().parse::<u8>().is_ok();
             match digit {
                 '+'|'/'|'x'|','|'%' => {
-                    let last_char = calc_clone.borrow_mut().chars().last().unwrap_or_default();
-                    println!("{}:{}", digit, last_char)
+                    if is_number {
+                        calc_clone.borrow_mut().push(*digit);
+                    }
+                },
+                '-' => {
+                    if last_char == '\u{0}' || is_number {
+                        calc_clone.borrow_mut().push(*digit);
+                    }
                 },
                 _ => {
                     calc_clone.borrow_mut().push(*digit);
-                    text.get_buffer().expect("Can't get buffer").set_text(&calc_clone.borrow_mut());
                 }
             }
+            text_buffer.set_text(&calc_clone.borrow_mut())
         }));
     }
     window.show_all();
@@ -67,7 +77,7 @@ fn main() {
         Some("com.github.altart.calculadora"),
         Default::default(),
     )
-    .expect("Initialization failed");
+    .expect("Initialization failed.");
     application.connect_activate(|app| {
         build_ui(app)
     });
