@@ -1,7 +1,7 @@
 extern crate gio;
 extern crate gtk;
 extern crate glib;
-extern crate meval; 
+extern crate meval;
 
 use gtk::prelude::*;
 use gio::prelude::*;
@@ -24,27 +24,37 @@ fn build_ui(application: &gtk::Application) {
     let text_buffer = text.get_buffer().expect("Can't ct");
 
     let button_equal: Button = builder.get_object("=").expect("Coun't get Button");
-    let calc_clone = calc.borrow_mut().clone();
+    let calc_clone = calc.clone();
     button_equal.connect_clicked(clone!(@weak text_buffer => move |_| {
-        text_buffer.set_text("=");
+        let result = meval::eval_str(&*calc_clone.borrow_mut());
+        match result {
+            Ok(number) => {
+                text_buffer.set_text(&number.to_string());
+                calc_clone.replace(number.to_string());
+            },
+            Err(_) => {
+                text_buffer.set_text("Error");
+                calc_clone.borrow_mut().clear();
+            },
+        }
     }));
     
     let button_undo: Button = builder.get_object("undo").expect("Coun't get Button");
     let calc_clone = calc.clone();
     button_undo.connect_clicked(clone!(@weak text_buffer => move |_| {
         calc_clone.borrow_mut().pop();
-        text_buffer.set_text(&calc_clone.borrow_mut());
+        text_buffer.set_text(&calc_clone.borrow());
     }));
 
     let button_undo: Button = builder.get_object("clear").expect("Coun't get Button");
     let calc_clone = calc.clone();
     button_undo.connect_clicked(clone!(@weak text_buffer => move |_| {
         calc_clone.borrow_mut().clear();
-        text_buffer.set_text(&calc_clone.borrow_mut());
+        text_buffer.set_text(&calc_clone.borrow());
     }));
 
     window.set_application(Some(application));
-    let digits: &'static [char; 16] = &['1','2','3','4','5','6','7','8','9','0',',','-','+','/','x','%'];
+    let digits: &'static [char; 16] = &['1','2','3','4','5','6','7','8','9','0','.','-','+','/','*','%'];
     for digit in digits.iter() {
         let button:Button = builder.get_object(&digit.to_string()).expect("Cout't get Button");
         let calc_clone = calc.clone();
@@ -52,7 +62,7 @@ fn build_ui(application: &gtk::Application) {
             let last_char = calc_clone.borrow_mut().chars().last().unwrap_or_default();
             let is_number = last_char.to_string().parse::<u8>().is_ok();
             match digit {
-                '+'|'/'|'x'|','|'%' => {
+                '+'|'/'|'*'|'.'|'%' => {
                     if is_number {
                         calc_clone.borrow_mut().push(*digit);
                     }
@@ -66,7 +76,7 @@ fn build_ui(application: &gtk::Application) {
                     calc_clone.borrow_mut().push(*digit);
                 }
             }
-            text_buffer.set_text(&calc_clone.borrow_mut())
+            text_buffer.set_text(&calc_clone.borrow());
         }));
     }
     window.show_all();
