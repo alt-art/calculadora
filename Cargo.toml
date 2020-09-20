@@ -12,4 +12,4 @@ meval = "0.2"
 
 [[bin]]
 name = "calculadora"
-path = "main.rs"
+path = "src/main.rs"
