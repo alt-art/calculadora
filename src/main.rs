@@ -23,38 +23,7 @@ fn build_ui(application: &gtk::Application) {
     let text: TextView = builder.get_object("text").expect("Cound't get text view");
     let text_buffer = text.get_buffer().expect("Can't ct");
 
-    let button_equal: Button = builder.get_object("=").expect("Coun't get Button");
-    let calc_clone = calc.clone();
-    button_equal.connect_clicked(clone!(@weak text_buffer => move |_| {
-        let result = meval::eval_str(&*calc_clone.borrow_mut());
-        match result {
-            Ok(number) => {
-                text_buffer.set_text(&number.to_string());
-                calc_clone.replace(number.to_string());
-            },
-            Err(_) => {
-                text_buffer.set_text("Error");
-                calc_clone.borrow_mut().clear();
-            },
-        }
-    }));
-    
-    let button_undo: Button = builder.get_object("undo").expect("Coun't get Button");
-    let calc_clone = calc.clone();
-    button_undo.connect_clicked(clone!(@weak text_buffer => move |_| {
-        calc_clone.borrow_mut().pop();
-        text_buffer.set_text(&calc_clone.borrow());
-    }));
-
-    let button_undo: Button = builder.get_object("clear").expect("Coun't get Button");
-    let calc_clone = calc.clone();
-    button_undo.connect_clicked(clone!(@weak text_buffer => move |_| {
-        calc_clone.borrow_mut().clear();
-        text_buffer.set_text(&calc_clone.borrow());
-    }));
-
-    window.set_application(Some(application));
-    let digits: &'static [char; 16] = &['1','2','3','4','5','6','7','8','9','0','.','-','+','/','*','%'];
+    let digits: &'static [char; 19] = &['1','2','3','4','5','6','7','8','9','0','.','-','+','/','*','%','c','u','='];
     for digit in digits.iter() {
         let button:Button = builder.get_object(&digit.to_string()).expect("Cout't get Button");
         let calc_clone = calc.clone();
@@ -72,6 +41,25 @@ fn build_ui(application: &gtk::Application) {
                         calc_clone.borrow_mut().push(*digit);
                     }
                 },
+                'c' => {
+                    calc_clone.borrow_mut().clear();
+                },
+                'u' => {
+                    calc_clone.borrow_mut().pop();
+                },
+                '=' => {
+                    let result = meval::eval_str(&*calc_clone.borrow_mut());
+                    match result {
+                        Ok(number) => {
+                            text_buffer.set_text(&number.to_string());
+                            calc_clone.replace(number.to_string());
+                        },
+                        Err(_) => {
+                            text_buffer.set_text("Error");
+                            calc_clone.borrow_mut().clear();
+                        },
+                    }
+                },
                 _ => {
                     calc_clone.borrow_mut().push(*digit);
                 }
@@ -79,6 +67,8 @@ fn build_ui(application: &gtk::Application) {
             text_buffer.set_text(&calc_clone.borrow());
         }));
     }
+    
+    window.set_application(Some(application));
     window.show_all();
 }
 
