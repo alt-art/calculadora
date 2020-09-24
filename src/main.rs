@@ -1,5 +1,6 @@
 extern crate gio;
 extern crate gtk;
+extern crate gdk;
 extern crate glib;
 extern crate meval;
 
@@ -67,7 +68,60 @@ fn build_ui(application: &gtk::Application) {
             text_buffer.set_text(&calc_clone.borrow());
         }));
     }
-    
+
+    window.connect_key_press_event(
+        move |_, key| {
+            let keyval = key.get_keyval().to_unicode().unwrap_or_default();
+            let key_state = key.get_state();
+            let key_code = key.get_hardware_keycode();
+            let last_char = calc.borrow_mut().chars().last().unwrap_or_default();
+            let is_number = last_char.to_string().parse::<u8>().is_ok();
+            match keyval {
+                '+'|'/'|'*'|'.'|'%' => {
+                    if is_number {
+                        calc.borrow_mut().push(keyval);
+                    }
+                },
+                _ => {
+                    if !key_state.intersects(gdk::ModifierType::SHIFT_MASK) {
+                        match key_code {
+                            36 => {
+                                let result = meval::eval_str(&*calc.borrow_mut());
+                                match result {
+                                    Ok(number) => {
+                                        text_buffer.set_text(&number.to_string());
+                                        calc.replace(number.to_string());
+                                    },
+                                    Err(_) => {
+                                        text_buffer.set_text("Error");
+                                        calc.borrow_mut().clear();
+                                    },
+                                }
+                            },
+                            20 => {
+                                if last_char == '\u{0}' || is_number {
+                                    calc.borrow_mut().push(keyval);
+                                }
+                            },
+                            22 => {
+                                calc.borrow_mut().pop();
+                            }
+                            10..=19 =>{
+                                calc.borrow_mut().push(keyval);
+                            }
+                            _ => {}
+                        }
+                    }
+                }
+            }
+            
+            text_buffer.set_text(&calc.borrow());
+            
+            println!("key pressed: {}; {}", keyval, key_code);
+
+            Inhibit(false)
+        },
+    );
     window.set_application(Some(application));
     window.show_all();
 }
