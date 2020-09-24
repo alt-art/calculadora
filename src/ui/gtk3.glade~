@@ -5,11 +5,8 @@
   <object class="GtkApplicationWindow" id="window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Calculadora</property>
-    <property name="resizable">False</property>
-    <property name="window_position">center</property>
     <property name="icon_name">accessories-calculator</property>
     <property name="type_hint">dialog</property>
-    <property name="show_menubar">False</property>
     <child type="titlebar">
       <placeholder/>
     </child>
@@ -32,7 +29,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="vscrollbar_policy">never</property>
-                <property name="window_placement_set">False</property>
                 <property name="shadow_type">etched-out</property>
                 <child>
                   <object class="GtkTextView" id="text">
@@ -40,13 +36,13 @@
                     <property name="can_focus">True</property>
                     <property name="hscroll_policy">natural</property>
                     <property name="vscroll_policy">natural</property>
-                    <property name="pixels_above_lines">10</property>
-                    <property name="pixels_below_lines">10</property>
-                    <property name="editable">False</property>
+                    <property name="pixels_above_lines">7</property>
+                    <property name="pixels_below_lines">7</property>
                     <property name="justification">right</property>
-                    <property name="left_margin">4</property>
-                    <property name="right_margin">4</property>
-                    <property name="bottom_margin">7</property>
+                    <property name="left_margin">8</property>
+                    <property name="right_margin">8</property>
+                    <property name="top_margin">4</property>
+                    <property name="bottom_margin">10</property>
                     <property name="cursor_visible">False</property>
                     <property name="accepts_tab">False</property>
                     <property name="input_hints">GTK_INPUT_HINT_NO_SPELLCHECK | GTK_INPUT_HINT_NONE</property>
@@ -306,7 +302,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="undo">
+                      <object class="GtkButton" id="u">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="focus_on_click">False</property>
