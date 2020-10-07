@@ -116,9 +116,6 @@ fn build_ui(application: &gtk::Application) {
             }
             
             text_buffer.set_text(&calc.borrow());
-            
-            println!("key pressed: {}; {}", keyval, key_code);
-
             Inhibit(false)
         },
     );
