@@ -125,7 +125,7 @@ fn build_ui(application: &gtk::Application) {
 
 fn main() {
     let application = gtk::Application::new(
-        Some("com.github.altart.calculadora"),
+        Some("com.altart.calculadora"),
         Default::default(),
     )
     .expect("Initialization failed.");
