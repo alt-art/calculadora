@@ -2,12 +2,14 @@
 name = "calculadora"
 version = "0.1.0"
 authors = ["alt-art <pedromendescraft@gmail.com>"]
+repository = "https://github.com/altart/calculadora/"
 edition = "2018"
 
+
 [dependencies]
-glib = "0.10.0"
-gtk = "0.9.0"
-gdk = "0.13.0"
+glib = "0.10.3"
+gtk = "0.9.1"
+gdk = "0.13.2"
 gio = "0.9.0"
 meval = "0.2"
 
