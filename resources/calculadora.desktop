@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Calculadora
+Comment=Simple Calculator
+Exec=calculadora
+Icon=calculadora
+Terminal=false
